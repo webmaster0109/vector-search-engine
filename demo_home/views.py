@@ -12,7 +12,12 @@ def vector_search_home(request):
 
     if search:
         query = SearchQuery(search)
-        vector = SearchVector('title', 'description', 'category')
+        vector = SearchVector('title', 'category', 'brand', 'description')
+        vector = (
+            SearchVector('title', weight="A") + 
+            SearchVector('category', weight="B") + 
+            SearchVector('brand', weight="C")
+        )
 
         results = products.annotate(
             rank=SearchRank(vector, query)
